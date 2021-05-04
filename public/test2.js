@@ -22,6 +22,7 @@
         messageB: document.querySelector(
           "#scroll-section-0 .main-message.first"
         ),
+        svg1: document.querySelector(".svgtest"),
         nav: document.querySelector(".local-nav"),
         svg: document.querySelector(".ribbon1-path svg"),
         testimg: document.querySelector(".testimg"),
@@ -213,7 +214,6 @@
       let removePin = ["pin0", "pin1"];
       myskillpadding =
         (window.innerWidth * 0.7 - window.innerWidth * 0.17 * 2) / 4;
-      console.log(sceneInfo[1].objs.myskill[2], "%^");
       sceneInfo[1].objs.myskill[1].children[0].children[0].classList.replace(
         "pin0",
         "pin1"
@@ -259,10 +259,9 @@
         (window.innerWidth * 0.35 - window.innerWidth * 0.1 * 2) / 4;
     }
 
-    console.log(myskillpadding, "@");
     document.querySelector(
       ".myskill2"
-    ).children[1].style.paddingLeft = `${myskillpadding}px`;
+    ).children[1].childNodes[1].style.marginLeft = `${myskillpadding}px`;
   }
 
   function setCanvasImages() {
@@ -354,6 +353,7 @@
     const currentYOffset = yOffset - prevScrollHeight;
     const scrollHeight = sceneInfo[currentScene].scrollHeight;
     const scrollRatio = currentYOffset / scrollHeight;
+
     if (scrollRatio <= ratioArr[0]) {
       // obj, left, top, xPoint, yPoint
 
@@ -528,7 +528,7 @@
     const currentYOffset = yOffset - prevScrollHeight;
     const scrollHeight = sceneInfo[currentScene].scrollHeight;
     const scrollRatio = currentYOffset / scrollHeight;
-
+    console.log(scrollHeight, window.pageYOffset, "@");
     switch (currentScene) {
       case 0:
         objs.nav.children[0].children[1].classList.add("highlight");
@@ -596,12 +596,14 @@
         }
 
         if (scrollRatio >= 0.4 && scrollRatio <= 0.72) {
+          objs.ribbonPath.style.display = "block";
           objs.ribbonPath.style.strokeDashoffset = calcValues(
             values.path_dashoffset_in,
             currentYOffset
           );
           scrollImgMove(ratioArr1, objs.testimg);
         } else if (scrollRatio < 0.4) {
+          objs.ribbonPath.style.display = "none";
           objs.testimg.style.opacity = calcValues(
             values.testimg_opacity,
             currentYOffset
@@ -626,7 +628,6 @@
         // let sequence2 = Math.round(
         //   calcValues(values.imageSequence, currentYOffset)
         // );
-        console.log(scrollRatio);
 
         if (!objs.bookwrap.classList.contains("afterscene0")) {
           objs.bookwrap.classList.add("afterscene0");
@@ -681,6 +682,7 @@
           );
         }
         if (scrollRatio >= 0.4) {
+          objs.ribbonPath.style.display = "block";
           objs.ribbonPath.style.strokeDashoffset = calcValues(
             values.ribbon_dashoffset,
             currentYOffset
@@ -712,6 +714,7 @@
             );
           }
         } else {
+          objs.ribbonPath.style.display = "none";
           objs.ribbonPath.style.strokeDashoffset = values.ribbon_dashoffset[0];
         }
 
@@ -796,10 +799,10 @@
           scrollRatio >=
           (scrollHeight * 0.6 + window.innerHeight) / scrollHeight
         ) {
-          // for (let i = 0; i < objs.stickyAll.length; i++) {
-          //   objs.stickyAll[i].classList.add("blendsticky");
-          // }
-          objs.stickyAll.forEach((v) => v.classList.add("blendsticky"));
+          for (let i = 0; i < objs.stickyAll.length; i++) {
+            objs.stickyAll[i].classList.add("blendsticky");
+          }
+          // objs.stickyAll.forEach((v) => v.classList.add("blendsticky"));
           objs.myskill_wrap.classList.add("blendsticky");
           objs.project_blend.style.marginTop = 0;
           objs.project_blend.style.position = "fixed";
@@ -815,10 +818,10 @@
             currentYOffset
           )})`;
         } else {
-          // for (let i = 0; i < objs.stickyAll.length; i++) {
-          //   objs.stickyAll[i].classList.remove("blendsticky");
-          // }
-          objs.stickyAll.forEach((v) => v.classList.remove("blendsticky"));
+          for (let i = 0; i < objs.stickyAll.length; i++) {
+            objs.stickyAll[i].classList.remove("blendsticky");
+          }
+          // objs.stickyAll.forEach((v) => v.classList.remove("blendsticky"));
           objs.myskill_wrap.classList.remove("blendsticky");
           objs.project_blend.style.transform = "scale(1)";
           objs.project_blend.style.marginTop = `${
@@ -1025,8 +1028,35 @@
       rafState = false;
     }
   }
+  function findBrowser() {
+    var agt = navigator.userAgent.toLowerCase();
+    if (agt.indexOf("chrome") != -1) return "Chrome";
+    if (agt.indexOf("opera") != -1) return "Opera";
+    if (agt.indexOf("staroffice") != -1) return "Star Office";
+    if (agt.indexOf("webtv") != -1) return "WebTV";
+    if (agt.indexOf("beonex") != -1) return "Beonex";
+    if (agt.indexOf("chimera") != -1) return "Chimera";
+    if (agt.indexOf("netpositive") != -1) return "NetPositive";
+    if (agt.indexOf("phoenix") != -1) return "Phoenix";
+    if (agt.indexOf("firefox") != -1) return "Firefox";
+    if (agt.indexOf("safari") != -1) return "Safari";
+    if (agt.indexOf("skipstone") != -1) return "SkipStone";
+    if (
+      (navigator.appName == "Netscape" &&
+        navigator.userAgent.search("Trident") != -1) ||
+      agt.indexOf("msie") != -1
+    )
+      return "Internet Explorer";
+    if (agt.indexOf("netscape") != -1) return "Netscape";
+    if (agt.indexOf("mozilla/5.0") != -1) return "Mozilla";
+  }
   window.addEventListener("load", () => {
     setCanvasImages();
+    const browser = findBrowser();
+    if (browser === "Internet Explorer") {
+      sceneInfo[0].objs.svg1.style.height = "100vh";
+      sceneInfo[1].objs.svg.style.height = "100vh";
+    }
     document.body.classList.remove("before-load");
     setLayout();
 
