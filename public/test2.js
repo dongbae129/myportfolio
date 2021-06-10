@@ -487,6 +487,17 @@
       //   skill4: [0, 1, { start: 0.537, end: 0.547 }],
       //   skill5: [0, 1, { start: 0.51, end: 0.52 }],
       //   skill6: [0, 1, { start: 0.46, end: 0.47 }],
+      if (scrollRatio >= 0.6) {
+        [...mobilearr1, ...mobilearr2].map((v) => {
+          objs.myskill[v].style.opacity = 1;
+        });
+        return;
+      } else if (scrollRatio <= 0.42) {
+        [...mobilearr1, ...mobilearr2].map((v) => {
+          objs.myskill[v].style.opacity = 0;
+        });
+        return;
+      }
       if (scrollRatio <= 0.5) {
         mobilearr1.map((v) => {
           objs.myskill[v].style.opacity = calcValues(
@@ -505,6 +516,17 @@
     } else {
       const desktopArr1 = [2, 3, 6];
       const desktopArr2 = [0, 1, 4, 5];
+      if (scrollRatio >= 0.6) {
+        [...desktopArr1, ...desktopArr2].map((v) => {
+          objs.myskill[v].style.opacity = 1;
+        });
+        return;
+      } else if (scrollRatio <= 0.42) {
+        [...desktopArr1, ...desktopArr2].map((v) => {
+          objs.myskill[v].style.opacity = 0;
+        });
+        return;
+      }
       if (scrollRatio <= 0.488) {
         desktopArr1.map((v) => {
           objs.myskill[v].style.opacity = calcValues(
@@ -528,7 +550,6 @@
     const currentYOffset = yOffset - prevScrollHeight;
     const scrollHeight = sceneInfo[currentScene].scrollHeight;
     const scrollRatio = currentYOffset / scrollHeight;
-    console.log(scrollHeight, window.pageYOffset, "@");
     switch (currentScene) {
       case 0:
         objs.nav.children[0].children[1].classList.add("highlight");
@@ -608,7 +629,8 @@
             values.testimg_opacity,
             currentYOffset
           );
-          objs.ribbonPath.style.strokeDashoffset = objs.ribbonPath.getTotalLength();
+          objs.ribbonPath.style.strokeDashoffset =
+            objs.ribbonPath.getTotalLength();
           imgMove(
             objs.testimg,
             window.innerWidth * 0.3,
@@ -628,7 +650,6 @@
         // let sequence2 = Math.round(
         //   calcValues(values.imageSequence, currentYOffset)
         // );
-
         if (!objs.bookwrap.classList.contains("afterscene0")) {
           objs.bookwrap.classList.add("afterscene0");
           sceneInfo[0].objs.ribbonPath.style.strokeDashoffset = 0;
@@ -650,18 +671,15 @@
         objs.myskill_wrap.addEventListener("mouseover", (e) => {
           // e.preventDefault();
           if (!e.target.classList.contains("myskill")) return;
-          // console.log("3");
           e.target.classList.add("visible");
         });
         objs.myskill_wrap.addEventListener("mouseout", (e) => {
           // e.preventDefault();
-          // console.log("2");
           if (!e.target.classList.contains("myskill")) return;
-          // console.log("4");
           e.target.classList.remove("visible");
         });
 
-        if (scrollRatio <= 0.45) {
+        if (scrollRatio <= 0.6) {
           // objs.context.drawImage(objs.videoImages[sequence2], 0, 0);
           if (!rafState) {
             rafId = requestAnimationFrame(loop);
@@ -713,6 +731,7 @@
               "highlight"
             );
           }
+          myskillOpacity(scrollRatio, objs, values, currentYOffset);
         } else {
           objs.ribbonPath.style.display = "none";
           objs.ribbonPath.style.strokeDashoffset = values.ribbon_dashoffset[0];
@@ -829,14 +848,14 @@
           }px`;
           objs.project_blend.style.position = "static";
         }
-        // skill0: [0, 1, { start: 0.542, end: 0.552 }],
-        // skill1: [0, 1, { start: 0.501, end: 0.511 }],
-        // skill2: [0, 1, { start: 0.47, end: 0.48 }],
-        // skill3: [0, 1, { start: 0.478, end: 0.488 }],
-        // skill4: [0, 1, { start: 0.537, end: 0.547 }],
-        // skill5: [0, 1, { start: 0.51, end: 0.52 }],
-        // skill6: [0, 1, { start: 0.46, end: 0.47 }],
-        myskillOpacity(scrollRatio, objs, values, currentYOffset);
+      // skill0: [0, 1, { start: 0.542, end: 0.552 }],
+      // skill1: [0, 1, { start: 0.501, end: 0.511 }],
+      // skill2: [0, 1, { start: 0.47, end: 0.48 }],
+      // skill3: [0, 1, { start: 0.478, end: 0.488 }],
+      // skill4: [0, 1, { start: 0.537, end: 0.547 }],
+      // skill5: [0, 1, { start: 0.51, end: 0.52 }],
+      // skill6: [0, 1, { start: 0.46, end: 0.47 }],
+      // myskillOpacity(scrollRatio, objs, values, currentYOffset);
       // if (scrollRatio <= 0.488) {
       //   objs.myskill[6].style.opacity = calcValues(
       //     values.skill6,
@@ -1075,6 +1094,7 @@
         tempScrollCount++;
       }, 20);
     }
+    playAnimation();
 
     window.addEventListener("scroll", () => {
       yOffset = window.pageYOffset;
